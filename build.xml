@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Demo Ant Project"  basedir="." default="run">
+   <property name="target.dir" value="target/java"></property>
+   <property name="src.dir" value="src/"></property>
+   <property name="classes.dir" value="${target.dir}/classes"></property>
+   <property name="jar.dir" value="${target.dir}/jar"></property>
+   
+   <target name="init">
+   		<mkdir dir="${classes.dir}"></mkdir>
+   		<mkdir dir="${jar.dir}"></mkdir>
+   </target>
+   
+   <target name="compile">
+   	<javac destdir="${classes.dir}" source="1.8" target="1.8" includeantruntime="true">
+   		<src path="${src.dir}"></src>
+   	</javac>
+   </target>
+   
+   <target name="jar">
+   	<jar destfile="${jar.dir}/sample.jar" basedir="${classes.dir}">
+   		<manifest>
+   			<attribute name="Main-Class" value="main.MainDemo"></attribute>
+   		</manifest>
+   	</jar>
+   </target>
+   
+   <target name="cleanup">
+   	<delete>
+   		<fileset dir="${classes.dir}">
+   			<include name="**/*.class"></include>
+   		</fileset>
+   	</delete>
+   	<delete>
+   		<fileset dir="${jar.dir}">
+   			<include name="**/*.jar"></include>
+   		</fileset>
+   	</delete>
+   	<delete dir="${classes.dir}"></delete>
+   	<delete dir="${jar.dir}"></delete>
+   	<delete dir="target"></delete>
+   </target>
+   
+   <target name="run" depends="cleanup,init,compile,jar">
+   	<java jar="${jar.dir}/sample.jar" fork="true"></java>
+   </target>
+</project>
